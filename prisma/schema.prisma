@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model FuzzTask {
+  id              String          @id @default(cuid())
+  name            String
+  targetApp       String
+  appDescription  String?
+  testCases       String
+  testConfig      String
+  status          String
+  createdAt       DateTime        @default(now())
+  startedAt       DateTime?
+  completedAt     DateTime?
+  executions      TestExecution[]
+  crashReports    CrashReport[]
+  result          TestResult?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TestExecution {
+  id              String        @id @default(cuid())
+  taskId          String
+  task            FuzzTask      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  testCaseIndex   Int
+  status          String
+  startTime       DateTime      @default(now())
+  endTime         DateTime?
+  duration        Int?
+  logs            String?
+  screenshotUrl   String?
+  crashReport     CrashReport?
+
+  @@index([taskId])
+  @@index([status])
+}
+
+model CrashReport {
+  id              String        @id @default(cuid())
+  executionId     String        @unique
+  execution       TestExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+  taskId          String
+  task            FuzzTask      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  crashType       String
+  stackTrace      String?
+  package         String
+  severity        String
+  description     String?
+  screenshotPath  String?
+  logcatPath      String?
+  createdAt       DateTime      @default(now())
+
+  @@index([taskId])
+  @@index([severity])
+}
+
+model TestResult {
+  id              String    @id @default(cuid())
+  taskId          String    @unique
+  task            FuzzTask  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  totalCases      Int
+  passedCases     Int
+  failedCases     Int
+  crashCount     Int
+  timeoutCount    Int
+  executionTime   Int
+  summary         String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([taskId])
+}

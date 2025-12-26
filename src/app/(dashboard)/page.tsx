@@ -2,10 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 interface Stats {
   totalTasks: number;
@@ -15,7 +11,6 @@ interface Stats {
 }
 
 export default function DashboardPage() {
-  const router = useRouter();
   const [stats, setStats] = useState<Stats>({
     totalTasks: 0,
     runningTasks: 0,
@@ -86,22 +81,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Card className="p-12 text-center">
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">开始您的第一个Fuzz测试</h2>
-          <p className="text-gray-500">
-            创建新任务，AI将自动生成测试用例并执行
-          </p>
-          <Button
-            size="lg"
-            onClick={() => router.push('/create-task')}
-            className="text-lg px-8"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            创建任务
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 }

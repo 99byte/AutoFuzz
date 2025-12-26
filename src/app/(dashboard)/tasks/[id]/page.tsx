@@ -89,7 +89,7 @@ export default function TaskMonitorPage() {
   return (
     <ReactFlowProvider>
       {/* 使用固定定位让内容铺满整个屏幕（导航栏下方） */}
-      <div className="fixed top-16 left-0 right-0 bottom-0 flex bg-muted/30 p-4 gap-4">
+      <div className="fixed top-16 left-0 right-0 bottom-0 flex bg-muted/30">
         {/* 左侧：流程画布 */}
         <div className="flex-1 relative overflow-hidden bg-card rounded-lg border">
           <TestFlowCanvas
@@ -104,8 +104,8 @@ export default function TaskMonitorPage() {
         </div>
 
         {/* 右侧：控制面板 */}
-        <aside className="w-80 bg-card rounded-lg border overflow-auto">
-          <ControlPanel
+        <div className="w-80 bg-card rounded-lg border overflow-auto">
+          {/* <ControlPanel
             task={task}
             currentProgress={currentProgress}
             crashes={crashes}
@@ -113,8 +113,9 @@ export default function TaskMonitorPage() {
             connected={connected}
             onStart={handleStart}
             onStop={handleStop}
-          />
-        </aside>
+          /> */}
+          <span>Control Panel</span>
+        </div>
       </div>
     </ReactFlowProvider>
   );

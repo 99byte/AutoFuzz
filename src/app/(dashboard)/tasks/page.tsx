@@ -1,5 +1,6 @@
 'use client';
 
+import { CreateTaskDialog } from '@/components/CreateTaskDialog';
 import { useEffect, useState } from 'react';
 import { TaskCard } from '@/components/TaskCard';
 import { useRouter } from 'next/navigation';
@@ -76,17 +77,13 @@ export default function TasksPage() {
           <h1 className="text-3xl font-bold">任务列表</h1>
           <p className="text-muted-foreground mt-1">共 {tasks.length} 个任务</p>
         </div>
+        <CreateTaskDialog onTaskCreated={fetchTasks} />
       </div>
 
       {tasks.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          暂无任务，
-          <button
-            onClick={() => router.push('/create-task')}
-            className="text-primary hover:underline"
-          >
-            创建第一个任务
-          </button>
+          <p className="mb-4">暂无任务</p>
+          <CreateTaskDialog onTaskCreated={fetchTasks} />
         </div>
       ) : (
         <>

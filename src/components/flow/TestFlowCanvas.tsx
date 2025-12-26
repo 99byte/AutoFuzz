@@ -17,8 +17,6 @@ import { ActionNode } from './nodes/ActionNode';
 import { CrashNode } from './nodes/CrashNode';
 import { SummaryNode } from './nodes/SummaryNode';
 import { NodeTooltip } from './NodeTooltip';
-import { ZoomControls } from './controls/ZoomControls';
-import { ViewControls } from './controls/ViewControls';
 import { TestStateNode, TestCaseSummary } from '@/types/flow';
 import { useState } from 'react';
 
@@ -62,17 +60,6 @@ const FlowContent = memo(({
     setTooltipNode(null);
   }, []);
 
-  const handleZoomIn = useCallback(() => {
-    zoomIn();
-  }, [zoomIn]);
-
-  const handleZoomOut = useCallback(() => {
-    zoomOut();
-  }, [zoomOut]);
-
-  const handleResetView = useCallback(() => {
-    setViewport({ x: 0, y: 0, zoom: 1 });
-  }, [setViewport]);
 
   return (
     <>
@@ -90,6 +77,7 @@ const FlowContent = memo(({
         maxZoom={4}
         snapToGrid
         snapGrid={[20, 20]}
+        proOptions={{ hideAttribution: true }}
       >
         <Background
           color="#cbd5e1"
@@ -115,12 +103,6 @@ const FlowContent = memo(({
           maskColor="rgba(0, 0, 0, 0.1)"
         />
 
-        <ZoomControls
-          zoom={0}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onReset={handleResetView}
-        />
       </ReactFlow>
 
       {tooltipNode && (
@@ -140,11 +122,6 @@ export const TestFlowCanvas = memo((props: TestFlowCanvasProps) => {
   return (
     <div className="w-full h-full relative">
       <FlowContent {...props} />
-      <ViewControls
-        onFitView={props.onFitView}
-        onResetView={() => props.onViewportChange({ x: 0, y: 0, zoom: 1 })}
-        onClear={props.onClear}
-      />
     </div>
   );
 });

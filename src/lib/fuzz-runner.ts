@@ -1,6 +1,6 @@
 import { prisma } from './prisma';
 import { AutoGLMFuzzer } from './autoglm';
-import { ADBMonitor } from './adb';
+import { HDCMonitor } from './hdc';
 import { TestCaseGenerator } from './ai';
 import { ScreenshotManager } from './screenshot';
 import { GeneratedTestCase, FuzzActionDetail } from '@/types/ai';
@@ -17,7 +17,7 @@ interface FuzzTaskConfig {
 export class FuzzTaskRunner {
   private config: FuzzTaskConfig;
   private fuzzer: AutoGLMFuzzer;
-  private adbMonitor: ADBMonitor;
+  private hdcMonitor: HDCMonitor;
   private testGenerator: TestCaseGenerator;
   private screenshotManager: ScreenshotManager;
   private isRunning: boolean = false;
@@ -31,7 +31,7 @@ export class FuzzTaskRunner {
       model: process.env.AUTOGLM_MODEL || 'autoglm-phone'
     });
 
-    this.adbMonitor = new ADBMonitor(config.targetApp);
+    this.hdcMonitor = new HDCMonitor(config.targetApp);
 
     this.testGenerator = new TestCaseGenerator(
       process.env.ZHIPU_API_KEY!,
@@ -76,7 +76,7 @@ export class FuzzTaskRunner {
       let currentTestCaseIndex = 0;
       let currentActionIndex = 0;
 
-      this.adbMonitor.startMonitoring(async (crash) => {
+      this.hdcMonitor.startMonitoring(async (crash) => {
         console.log('检测到崩溃:', crash);
         crashCount++;
 
@@ -129,9 +129,9 @@ export class FuzzTaskRunner {
         const caseCrashCount: number[] = [];
 
         try {
-          await this.adbMonitor.forceStopApp();
+          await this.hdcMonitor.forceStopApp();
           await new Promise(resolve => setTimeout(resolve, 1000));
-          await this.adbMonitor.launchApp();
+          await this.hdcMonitor.launchApp();
 
           const startScreenshotUrl = await this.screenshotManager.captureStartScreenshot(i);
           streamToClient(this.config.taskId, {
@@ -164,7 +164,7 @@ export class FuzzTaskRunner {
               action: actions[j].action,
               description: actions[j].description,
               params: actions[j].params
-            });
+            }, this.config.targetApp);
 
             const screenshotUrl = await this.screenshotManager.captureActionScreenshot(
               i,
@@ -244,7 +244,7 @@ export class FuzzTaskRunner {
         }
       }
 
-      this.adbMonitor.stopMonitoring();
+      this.hdcMonitor.stopMonitoring();
 
       await prisma.testResult.create({
         data: {

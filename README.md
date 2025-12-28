@@ -9,21 +9,26 @@ AI驱动的手机应用Fuzz测试平台
 
 ## 📖 简介
 
-AutoFuzz 是一个基于智谱AI GLM-4和Open-AutoGLM的自动化Fuzz测试平台。它可以：
+# AutoFuzz
 
-- ✨ **AI生成测试用例** - 使用智谱GLM-4模型自动生成UI交互测试用例
-- 🤖 **自动化执行** - 通过AutoGLM自动执行测试操作
-- 📊 **实时监控** - 通过SSE实时推送测试进度和执行日志
-- 🚨 **崩溃检测** - 实时检测应用崩溃并生成报告
-- 📈 **结果分析** - AI分析测试结果，识别缺陷模式
+基于 AI 大模型驱动的鸿蒙应用自动化 Fuzz 测试平台。
 
-## 🚀 快速开始
+## 特性
 
-### 环境要求
+- **智能生成测试用例**: 利用 OpenAI/GLM-4 等大模型分析应用描述，生成多样化的 UI 交互场景。
+- **鸿蒙原生支持**: 原生集成 HDC (HarmonyOS Device Connector)，支持 HAP应用管理与 uinput 模拟操作。
+- **实时监控与可视化**:
+  - 实时流程画布 (React Flow) 展示测试步骤。
+  - 实时日志终端。
+  - 实时崩溃检测 (检测 JS Crash, CPP Crash, App Freeze)。
+- **详细报告**: 完整的测试报告，包含截图、堆栈跟踪、执行日志，支持导出。
+
+## 前置要求
 
 - Node.js 18+
-- Python 3.10+
-- ADB (Android Debug Bridge)
+- HarmonyOS SDK / Command Line Tools (需要 `hdc` 命令在 PATH 中)
+- 连接的鸿蒙设备或模拟器 (需开启开发者模式和 USB 调试)
+- Python 3.10+ (可选，用于高级 AI 代理功能)
 - Android手机（启用开发者模式和USB调试）
 
 ### 安装

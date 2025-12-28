@@ -38,6 +38,12 @@ export default function TaskMonitorPage() {
           break;
         case 'crash_detected':
           setCrashes(event.totalCrashes);
+          if (event.crash) {
+            setTask((prev: any) => ({
+              ...prev,
+              crashReports: [event.crash, ...(prev?.crashReports || [])]
+            }));
+          }
           break;
         case 'task_completed':
         case 'task_failed':
@@ -104,8 +110,8 @@ export default function TaskMonitorPage() {
         </div>
 
         {/* 右侧：控制面板 */}
-        <div className="w-80 bg-card rounded-lg border overflow-auto">
-          {/* <ControlPanel
+        <div className="w-96 bg-card border-l overflow-hidden flex flex-col shadow-xl z-20">
+          <ControlPanel
             task={task}
             currentProgress={currentProgress}
             crashes={crashes}
@@ -113,8 +119,7 @@ export default function TaskMonitorPage() {
             connected={connected}
             onStart={handleStart}
             onStop={handleStop}
-          /> */}
-          <span>Control Panel</span>
+          />
         </div>
       </div>
     </ReactFlowProvider>
